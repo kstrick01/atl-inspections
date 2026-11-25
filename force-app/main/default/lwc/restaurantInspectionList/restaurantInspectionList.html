@@ -1,0 +1,92 @@
+<template>
+    <lightning-card title="Atlanta Restaurant Inspections" icon-name="standard:store">
+        <div class="slds-var-p-horizontal_medium">
+            <div class="slds-grid slds-gutters slds-wrap">
+                <div class="slds-col slds-size_1-of-1 slds-medium-size_2-of-3">
+                    <lightning-input
+                        type="search"
+                        label="Restaurant name"
+                        placeholder="Search by name"
+                        onchange={handleSearchChange}
+                    ></lightning-input>
+                </div>
+                <div class="slds-col slds-size_1-of-1 slds-medium-size_1-of-3">
+                    <lightning-input
+                        type="search"
+                        label="ZIP code"
+                        placeholder="e.g. 30303"
+                        maxlength="10"
+                        onchange={handlePostalChange}
+                    ></lightning-input>
+                </div>
+            </div>
+
+            <template lwc:if={errorMessage}>
+                <p class="slds-text-color_error slds-var-m-top_small">{errorMessage}</p>
+            </template>
+
+            <template lwc:if={isEmpty}>
+                <p class="slds-var-m-top_medium slds-text-color_weak">
+                    No restaurants match your search.
+                </p>
+            </template>
+
+            <ul class="slds-var-m-top_medium">
+                <template for:each={rows} for:item="row">
+                    <li key={row.Id} class="slds-var-p-vertical_small slds-border_bottom">
+                        <div class="slds-grid slds-grid_vertical-align-start slds-wrap">
+                            <div class="slds-col slds-size_1-of-1 slds-medium-size_2-of-3">
+                                <p class="slds-text-heading_small">{row.Name}</p>
+                                <p class="slds-text-body_small slds-text-color_weak">
+                                    {row.Address__c} {row.City__c} {row.Postal_Code__c}
+                                </p>
+                            </div>
+                            <div class="slds-col slds-size_1-of-1 slds-medium-size_1-of-3">
+                                <c-inspection-badge
+                                    grade={row.Latest_Grade__c}
+                                    score={row.Latest_Score__c}
+                                    inspection-date={row.Latest_Inspection_Date__c}
+                                ></c-inspection-badge>
+                            </div>
+                        </div>
+
+                        <lightning-button
+                            variant="base"
+                            label={row.historyLabel}
+                            data-id={row.Id}
+                            onclick={handleToggleHistory}
+                            class="slds-var-m-top_x-small"
+                        ></lightning-button>
+
+                        <template lwc:if={row.isExpanded}>
+                            <template lwc:if={historyError}>
+                                <p class="slds-text-color_error">{historyError}</p>
+                            </template>
+                            <template lwc:if={hasHistory}>
+                                <ul class="slds-var-m-top_x-small">
+                                    <template for:each={history} for:item="inspection">
+                                        <li key={inspection.Id} class="slds-text-body_small">
+                                            <lightning-formatted-date-time
+                                                value={inspection.Inspection_Date__c}
+                                                year="numeric"
+                                                month="short"
+                                                day="2-digit"
+                                                time-zone="UTC"
+                                            ></lightning-formatted-date-time>
+                                            : {inspection.Score__c} ({inspection.Grade__c})
+                                        </li>
+                                    </template>
+                                </ul>
+                            </template>
+                        </template>
+                    </li>
+                </template>
+            </ul>
+
+            <p class="slds-text-body_small slds-text-color_weak slds-var-m-vertical_medium">
+                Scores come from public health department inspection records and may not reflect
+                the most recent inspection.
+            </p>
+        </div>
+    </lightning-card>
+</template>

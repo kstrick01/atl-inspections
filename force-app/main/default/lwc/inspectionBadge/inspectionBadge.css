@@ -1,0 +1,35 @@
+/* The grade letter is always printed, so color is never the only signal. */
+.badge {
+    display: inline-block;
+    padding: 0.125rem 0.625rem;
+    border-radius: 0.75rem;
+    font-size: 0.8125rem;
+    font-weight: 600;
+    color: #181818;
+}
+
+.badge-a {
+    background: #2e844a;
+    color: #ffffff;
+}
+
+.badge-b {
+    background: #ffb75d;
+}
+
+.badge-c {
+    background: #fe9339;
+}
+
+.badge-u {
+    background: #ba0517;
+    color: #ffffff;
+}
+
+.badge-none {
+    background: #e5e5e5;
+}
+
+.stale {
+    color: #8e030f;
+}

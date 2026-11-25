@@ -1,0 +1,23 @@
+<template>
+    <template lwc:if={hasInspection}>
+        <span class={badgeClass} title="Health inspection grade and score">
+            Grade {grade} · {score}
+        </span>
+        <p class="slds-text-body_small slds-text-color_weak">
+            Inspected
+            <lightning-formatted-date-time
+                value={inspectionDate}
+                year="numeric"
+                month="short"
+                day="2-digit"
+                time-zone="UTC"
+            ></lightning-formatted-date-time>
+        </p>
+        <template lwc:if={isStale}>
+            <p class="slds-text-body_small stale">Last inspection was over a year ago</p>
+        </template>
+    </template>
+    <template lwc:else>
+        <span class="badge badge-none">No inspection on file</span>
+    </template>
+</template>
